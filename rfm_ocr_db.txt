@@ -1,0 +1,35 @@
+-- Table des utilisateurs
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    role VARCHAR(50) DEFAULT 'correcteur',
+    is_active BOOLEAN DEFAULT true
+);
+
+-- Table des documents (fichiers sources et suivi du traitement)
+CREATE TABLE rfm_documents (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL, -- L'utilisateur qui a uploadé
+    filename VARCHAR(255) NOT NULL,
+    uploaded_by VARCHAR(100),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    extraction_ocr TEXT,
+    statut VARCHAR(50) DEFAULT 'en attente',
+    valide_par VARCHAR(100),
+    validated_at TIMESTAMP,
+    upload_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Table des données RFM (informations extraites de l'OCR)
+CREATE TABLE rfm_data (
+    id SERIAL PRIMARY KEY,
+    document_id INTEGER REFERENCES rfm_documents(id) ON DELETE CASCADE, -- Lien direct avec le document
+    lieu_dit VARCHAR(255),
+    province VARCHAR(100),
+    commune VARCHAR(100),
+    parcelle VARCHAR(100),
+    section VARCHAR(100),
+    requerant VARCHAR(255),
+    reference VARCHAR(100)
+);

@@ -1,0 +1,9 @@
+# Ignorer les fichiers de configuration sensibles et secrets
+github_token.txt
+credentials.txt
+
+# Ignorer les caches Python et environnements
+__pycache__/
+*.pyc
+venv/
+.env
